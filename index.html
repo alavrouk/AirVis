@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AirQualitySim</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<style>
+    canvas {
+        width: 100%;
+        height: 100%;
+    }
+    card {
+        width: 100%;
+        height: 100%;
+    }
+    .COCOLOR div {
+        display: inline;
+    }
+</style>
+<body>
+
+<!-- Jumbotron -->
+<div class="jumbotron">
+    <h1 class="display-4">VisAir</h1>
+    <p class="lead">Input your address to see an in depth visual representation of the air quality</p>
+    <hr class="my-4">
+
+    <div class="input-group input-group-lg">
+        <input type="text" id="address" class="form-control" placeholder="266 Ferst Dr NW, Atlanta, GA 30332" aria-label="Address" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-success" onclick="call()" type="button">Go!</button>
+        </div>
+    </div>
+</div>
+<!-- /Jumbotron -->
+<!-- Body -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Canvas -->
+        <div class="col-lg-7">
+            <canvas id="canvas" width="300" height="300"
+                    style="border: 1px solid black;">
+            </canvas>
+        </div>
+        <!-- Canvas -->
+        <!-- DataCard -->
+        <div class="col-lg-5">
+            <div class="card mb-4 box-shadow" id="card">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Data</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Table -->
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Symbol</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Concentration</th>
+                            <th scope="col">AQI</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id ="COROW">
+                            <th scope="row">CO</th>
+                            <td>Carbon Monoxide</td>
+                            <td><p id="COCONC">X</p></td>
+                            <td><p id="COAQI">X</p>
+                            </td>
+                        </tr>
+                        <tr id = "NO2ROW">
+                            <th scope="row">NO2</th>
+                            <td>Nitrogen Dioxide</td>
+                            <td><p id="NO2CONC">X</p></td>
+                            <td><p id="NO2AQI">X</p></td>
+                        </tr>
+                        <tr id="O3ROW">
+                            <th scope="row">O3</th>
+                            <td>Ozone</td>
+                            <td><p id="O3CONC">X</p></td>
+                            <td><p id="O3AQI">X</p></td>
+                        </tr>
+                        <tr id = "PM10ROW">
+                            <th scope="row">PM10</th>
+                            <td>Read More</td>
+                            <td><p id="PM10CONC">X</p></td>
+                            <td><p id="PM10AQI">X</p></td>
+                        </tr>
+                        <tr id = "PM25ROW">
+                            <th scope="row">PM2.5</th>
+                            <td>Read More</td>
+                            <td><p id="PM25CONC">X</p></td>
+                            <td><p id="PM25AQI">X</p></td>
+                        </tr>
+                        <tr id="SO2ROW">
+                            <th scope="row">S02</th>
+                            <td>Sulfur Dioxide</td>
+                            <td><p id="SO2CONC">X</p></td>
+                            <td><p id="SO2AQI">X</p></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- /Table -->
+                    <div class="card">
+                        <br>
+                        <center><img id="molecule" src="resources/AVLOGO.png" alt="Card image cap" width="30%" height="30%"></center>
+                        <div class="card-body">
+                            <p> <b>Sources: </b><p id="SOURCES">Click on a row in the table above to learn more!</p></p>
+                            <p> <b>Effects: </b><p id="EFFECTS">Click on a row in the table above to learn more!</p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /DataCard -->
+
+    </div>
+</div>
+<!-- /Body -->
+
+<p id="clear">clear</p>
+<script src="./canvas.js"></script>
+</body>
+</html>
