@@ -172,7 +172,66 @@ async function call() {
     document.getElementById("SO2AQI").innerHTML= SO2AQI;
     document.getElementById("SO2AQI").style.color = SO2COLOR;
 
-    // Math
-    var CO = geoData.data.pollutants.co.concentration.value;
-
+    var CO = geoData.data.pollutants.co.concentration.value * 1.18;
+    var NO2 = geoData.data.pollutants.no2.concentration.value * 1.95;
+    var O3 = geoData.data.pollutants.o3.concentration.value * 2.03;
+    var PM10 = geoData.data.pollutants.pm10.concentration.value;
+    var PM25 = geoData.data.pollutants.pm25.concentration.value;
+    var SO2 = geoData.data.pollutants.so2.concentration.value * 2.71;
+    var total = CO+NO2+O3+PM10+PM25+SO2;
+    console.log(total);
+    // Now I will scale this to 1600 (perfect square)
+    var multiplier = 1600/total;
+    CO = Math.ceil(CO*multiplier);
+    NO2 = Math.ceil(NO2*multiplier);
+    O3 = Math.ceil(O3*multiplier);
+    PM10 = Math.floor(PM10 * multiplier);
+    PM25 = Math.floor(PM25*multiplier);
+    SO2 = Math.floor(SO2 * multiplier);
+    console.log("CO: " + CO); //mm = 28
+    console.log("NO2: " + NO2); //mm = 46
+    console.log("O3: " + O3); //mm = 48
+    console.log("PM10: " + PM10); //mm~500
+    console.log("PM25: " + PM25); //mm~250
+    console.log("SO2: " + SO2); //mm=64
+    var newTotal = CO+NO2+O3+PM10+PM25+SO2;
+    var diff = 1600 - newTotal;
+    CO = CO + diff;
+    newTotal = CO+NO2+O3+PM10+PM25+SO2;
+    console.log(newTotal);
+    // Draw the grid on the canvas
+    var boxes = 40;
+    var rowIncrement = canvas.width/40;
+    var colIncrement = canvas.height/40;
+    for (var row = 0; row < boxes; row++) {
+        for (var column = 0; column < boxes; column++) {
+            var x = column * rowIncrement;
+            var y = row * colIncrement;
+            c.beginPath();
+            c.lineWidth = 0.25;
+            c.strokeStyle = "black";
+            if (CO !== 0) {
+                c.fillStyle = "#DCEDFF";
+                CO--;
+            } else if (NO2 !== 0){
+                c.fillStyle = "#94B0DA";
+                NO2--;
+            } else if (O3 !== 0) {
+                c.fillStyle = "#8F91A2";
+                O3--;
+            } else if (PM10 !== 0) {
+                c.fillStyle = "#505A5B";
+                PM10--;
+            } else if (PM25 !== 0) {
+                c.fillStyle = "#384D48";
+                PM25--
+            } else {
+                c.fillStyle = "#343F3E";
+            }
+            c.rect(x, y, rowIncrement, colIncrement);
+            c.fill();
+            c.stroke();
+            c.closePath();
+        }
+    }
 }
