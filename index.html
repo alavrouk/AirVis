@@ -7,11 +7,13 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
 </head>
 <style>
     canvas {
         width: 100%;
-        height: 100%;
+        height: 85%;
     }
     card {
         width: 100%;
@@ -20,17 +22,21 @@
     .COCOLOR div {
         display: inline;
     }
+    .molecule img {
+        width: 30%;
+        height: auto;
+    }
 </style>
 <body>
 
 <!-- Jumbotron -->
 <div class="jumbotron">
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-9 my-auto">
             <h1 class="display-1">AirVis</h1>
             <h3>Input your address to see an in depth visual representation of the air quality</h3>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-3 my-auto">
             <img src="resources/AVLOGO.png" width = "100%" height = "100%">
         </div>
     </div>
@@ -40,29 +46,30 @@
             <button class="btn btn-info" onclick="call()" type="button" style="background-color:#7cd1e4;">Go!</button>
         </div>
     </div>
+    <br>
 </div>
 <!-- /Jumbotron -->
 <!-- Body -->
 <div class="container-fluid">
     <div class="row">
         <!-- Canvas -->
-        <div class="col-lg-7" id="canvasrow">
+        <div class="col-lg-6" id="canvasrow">
             <canvas id="canvas" width="300" height="300"
-                    style="border: 1px solid black;">
+                    style="border: 5px solid #7cd1e4;">
             </canvas>
         </div>
         <!-- Canvas -->
         <!-- DataCard -->
-        <div class="col-lg-5">
-            <div class="card mb-4 box-shadow" id="card">
+        <div class="col-lg-6">
+            <div class="card mb-4 box-shadow" id="card" style="border: 5px solid #7cd1e4;">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Data</h4>
+                    <h2>Pollutant Information</h2>
                 </div>
                 <div class="card-body">
                     <!-- Table -->
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
                         <thead>
-                        <tr>
+                        <tr class="table-active">
                             <th scope="col">Symbol</th>
                             <th scope="col">Name</th>
                             <th scope="col">Concentration</th>
@@ -70,40 +77,44 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr id ="COROW">
-                            <th scope="row"><div style="color:#DCEDFF;font-size:40px">&#9632;</div></th>
-                            <td class="align-middle">Carbon Monoxide/CO</td>
+                        <tr class="table-primary" id ="COROW">
+                            <th class="align-middle" scope="row">CO</th>
+                            <td class="align-middle">Carbon Monoxide</td>
                             <td class="align-middle"><p id="COCONC">X</p></td>
                             <td class="align-middle"><p id="COAQI">X</p>
                             </td>
                         </tr>
-                        <tr id = "NO2ROW">
-                            <th scope="row"><div style="color:#94B0DA;font-size:40px">&#9632;</div></th>
-                            <td class="align-middle">Nitrogen Dioxide/NO2</td>
+                        <tr class="table-secondary" id = "NO2ROW">
+                            <th class="align-middle" scope="row">NO<sub>2</sub></th>
+                            <td class="align-middle">Nitrogen Dioxide</td>
                             <td class="align-middle"><p id="NO2CONC">X</p></td>
                             <td class="align-middle"><p id="NO2AQI">X</p></td>
                         </tr>
-                        <tr id="O3ROW">
-                            <th scope="row"><div style="color:#8F91A2;font-size:40px">&#9632;</div></th>
+                        <tr class="table-primary" id="O3ROW">
+                            <th class="align-middle" scope="row">O<sub>3</sub></th>
                             <td class="align-middle">Ozone/O3</td>
                             <td class="align-middle"><p id="O3CONC">X</p></td>
                             <td class="align-middle"><p id="O3AQI">X</p></td>
                         </tr>
-                        <tr id = "PM10ROW">
-                            <th scope="row"><div style="color:#505A5B;font-size:40px">&#9632;</div></th>
-                            <td class="align-middle">PM10 (HL)</td>
+                        <tr class="table-secondary" id="PM10ROW">
+                            <th class="align-middle" scope="row">PM<sub>10</sub></th>
+                            <td class="align-middle">
+                                <a href="https://ww2.arb.ca.gov/resources/inhalable-particulate-matter-and-health">Learn More Here</a>
+                            </td>
                             <td class="align-middle"><p id="PM10CONC">X</p></td>
                             <td class="align-middle"><p id="PM10AQI">X</p></td>
                         </tr>
-                        <tr id = "PM25ROW">
-                            <th scope="row"><div style="color:#384D48;font-size:40px">&#9632;</div></th>
-                            <td class="align-middle">PM2.5 (HL)</td>
+                        <tr class="table-primary" id = "PM25ROW">
+                            <th class="align-middle" scope="row">PM<sub>2.5</sub></th>
+                            <td class="align-middle">
+                                <a href="https://ww2.arb.ca.gov/resources/inhalable-particulate-matter-and-health">Learn More Here</a>
+                            </td>
                             <td class="align-middle"><p id="PM25CONC">X</p></td>
                             <td class="align-middle"><p id="PM25AQI">X</p></td>
                         </tr>
-                        <tr id="SO2ROW">
-                            <th scope="row"><div style="color:#343F3E;font-size:40px">&#9632;</div></th>
-                            <td class="align-middle">Sulfur Dioxide/SO2</td>
+                        <tr class="table-secondary" id="SO2ROW">
+                            <th class="align-middle" scope="row">SO<sub>2</sub></th>
+                            <td class="align-middle">Sulfur Dioxide</td>
                             <td class="align-middle"><p id="SO2CONC">X</p></td>
                             <td class="align-middle"><p id="SO2AQI">X</p></td>
                         </tr>
@@ -112,17 +123,21 @@
                     <!-- /Table -->
                     <div class="card">
                         <br>
-                        <center><img id="molecule" src="resources/AVLOGO.png" alt="Card image cap" width="30%" height="30%"></center>
+                        <center><img id="molecule" src="resources/AVLOGO.png" alt="Card image cap" width="28%"></center>
                         <div class="card-body">
-                            <p> <b>Sources: </b><p id="SOURCES">Click on a row in the table above to learn more!</p></p>
-                            <p> <b>Effects: </b><p id="EFFECTS">Click on a row in the table above to learn more!</p></p>
+                            <h2>Sources</h2><p class="lead" id="SOURCES">Click on a row in the table above to learn more!</p>
+                            <h2>Effects</h2><p class="lead" id="EFFECTS">Click on a row in the table above to learn more!</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- /DataCard -->
+        <div class="row">
+            <div class="col-lg-5">
 
+            </div>
+        </div>
     </div>
 </div>
 <!-- /Body -->

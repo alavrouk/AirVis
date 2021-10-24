@@ -1,10 +1,12 @@
 // getting a reference to our HTML element
 const canvas = document.querySelector('canvas')
-
-// initiating 2D context on it
-const c = canvas.getContext('2d')
+var canvasWidth = canvas.width;
+var canvasHeight = canvas.height;
+var c = canvas.getContext("2d");
+var canvasData = c.getImageData(0, 0, canvasWidth, canvasHeight);
 
 window.onload = initDivMouseOver;
+
 function initDivMouseOver() {
     // This is done so incredibly poorly
     // I'm sorry
@@ -112,6 +114,24 @@ function setCharAt(str,index,chr) {
     return str.substring(0,index) + chr + str.substring(index+1);
 }
 
+// That's how you define the value of a pixel //
+function drawPixel (x, y, r, g, b, a) {
+    var index = (x + y * canvasWidth) * 4;
+
+    canvasData.data[index + 0] = r;
+    canvasData.data[index + 1] = g;
+    canvasData.data[index + 2] = b;
+    canvasData.data[index + 3] = a;
+}
+
+// That's how you update the canvas, so that your //
+// modification are taken in consideration //
+function updateCanvas() {
+    c.putImageData(canvasData, 0, 0);
+}
+
+
+
 async function call() {
     // String Parsing to replace spaces with pluses in accordance to google API
     var address = document.getElementById('address').value;
@@ -171,67 +191,42 @@ async function call() {
     document.getElementById("SO2CONC").innerHTML= SO2CONC;
     document.getElementById("SO2AQI").innerHTML= SO2AQI;
     document.getElementById("SO2AQI").style.color = SO2COLOR;
-
     var CO = geoData.data.pollutants.co.concentration.value * 1.18;
     var NO2 = geoData.data.pollutants.no2.concentration.value * 1.95;
     var O3 = geoData.data.pollutants.o3.concentration.value * 2.03;
-    var PM10 = geoData.data.pollutants.pm10.concentration.value;
-    var PM25 = geoData.data.pollutants.pm25.concentration.value;
+    var PM10 = geoData.data.pollutants.pm10.concentration.value * 5;
+    var PM25 = geoData.data.pollutants.pm25.concentration.value * 5;
     var SO2 = geoData.data.pollutants.so2.concentration.value * 2.71;
     var total = CO+NO2+O3+PM10+PM25+SO2;
     console.log(total);
     // Now I will scale this to 1600 (perfect square)
-    var multiplier = 1600/total;
-    CO = Math.ceil(CO*multiplier);
-    NO2 = Math.ceil(NO2*multiplier);
-    O3 = Math.ceil(O3*multiplier);
-    PM10 = Math.floor(PM10 * multiplier);
-    PM25 = Math.floor(PM25*multiplier);
-    SO2 = Math.floor(SO2 * multiplier);
-    console.log("CO: " + CO); //mm = 28
-    console.log("NO2: " + NO2); //mm = 46
-    console.log("O3: " + O3); //mm = 48
-    console.log("PM10: " + PM10); //mm~500
-    console.log("PM25: " + PM25); //mm~250
-    console.log("SO2: " + SO2); //mm=64
-    var newTotal = CO+NO2+O3+PM10+PM25+SO2;
-    var diff = 1600 - newTotal;
-    CO = CO + diff;
-    newTotal = CO+NO2+O3+PM10+PM25+SO2;
-    console.log(newTotal);
-    // Draw the grid on the canvas
-    var boxes = 40;
-    var rowIncrement = canvas.width/40;
-    var colIncrement = canvas.height/40;
-    for (var row = 0; row < boxes; row++) {
-        for (var column = 0; column < boxes; column++) {
-            var x = column * rowIncrement;
-            var y = row * colIncrement;
-            c.beginPath();
-            c.lineWidth = 0.25;
-            c.strokeStyle = "black";
-            if (CO !== 0) {
-                c.fillStyle = "#DCEDFF";
-                CO--;
-            } else if (NO2 !== 0){
-                c.fillStyle = "#94B0DA";
-                NO2--;
-            } else if (O3 !== 0) {
-                c.fillStyle = "#8F91A2";
-                O3--;
-            } else if (PM10 !== 0) {
-                c.fillStyle = "#505A5B";
-                PM10--;
-            } else if (PM25 !== 0) {
-                c.fillStyle = "#384D48";
-                PM25--
-            } else {
-                c.fillStyle = "#343F3E";
-            }
-            c.rect(x, y, rowIncrement, colIncrement);
-            c.fill();
-            c.stroke();
-            c.closePath();
-        }
+    canvasData.data.fill(0);
+    for (var i = 0; i < total; i++) {
+        var randomX1 = Math.floor(Math.random() * canvas.width);
+        var randomY1 = Math.floor(Math.random() * canvas.height);
+        drawPixel(randomX1, randomY1, 99, 103, 112, 255);
+
+        drawPixel(randomX1 + 1, randomY1, 137, 143, 156, 255);
+        drawPixel(randomX1 - 1, randomY1, 137, 143, 156, 255);
+        drawPixel(randomX1, randomY1 + 1, 137, 143, 156, 255);
+        drawPixel(randomX1, randomY1 - 1, 137, 143, 156, 255);
+        drawPixel(randomX1 + 1, randomY1 + 1, 137, 143, 156, 255);
+        drawPixel(randomX1 - 1, randomY1 - 1, 137, 143, 156, 255);
+        drawPixel(randomX1 - 1, randomY1 + 1, 137, 143, 156, 255);
+        drawPixel(randomX1 + 1, randomY1 - 1, 137, 143, 156, 255);
+
+        drawPixel(randomX1, randomY1 + 2, 171, 179, 196, 255);
+        drawPixel(randomX1, randomY1 - 2, 171, 179, 196, 255);
+        drawPixel(randomX1 - 1, randomY1 + 2, 171, 179, 196, 255);
+        drawPixel(randomX1 + 1, randomY1 + 2, 171, 179, 196, 255);
+        drawPixel(randomX1 - 1, randomY1 - 2, 171, 179, 196, 255);
+        drawPixel(randomX1 + 1, randomY1 - 2, 171, 179, 196, 255);
+        drawPixel(randomX1 + 2, randomY1, 171, 179, 196, 255);
+        drawPixel(randomX1 - 2, randomY1, 171, 179, 196, 255);
+        drawPixel(randomX1 + 2, randomY1 - 1, 171, 179, 196, 255);
+        drawPixel(randomX1 + 2, randomY1 + 1, 171, 179, 196, 255);
+        drawPixel(randomX1 - 2, randomY1 - 1, 171, 179, 196, 255);
+        drawPixel(randomX1 - 2, randomY1 + 1, 171, 179, 196, 255);
     }
+    updateCanvas();
 }
