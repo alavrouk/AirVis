@@ -34,7 +34,7 @@
     <div class="row">
         <div class="col-lg-9 my-auto">
             <h1 class="display-1">AirVis</h1>
-            <h3>Input your address to see an in depth visual representation of the air quality</h3>
+            <h3>Input your address to see a representation of the pollution in the air you breathe</h3>
         </div>
         <div class="col-lg-3 my-auto">
             <img src="resources/AVLOGO.png" width = "100%" height = "100%">
@@ -50,18 +50,32 @@
 </div>
 <!-- /Jumbotron -->
 <!-- Body -->
+
 <div class="container-fluid">
     <div class="row">
         <!-- Canvas -->
-        <div class="col-lg-6" id="canvasrow">
+        <div class="col-lg-6 my-auto" id="canvasrow">
             <canvas id="canvas" width="300" height="300"
                     style="border: 5px solid #7cd1e4;">
             </canvas>
         </div>
         <!-- Canvas -->
         <!-- DataCard -->
-        <div class="col-lg-6">
-            <div class="card mb-4 box-shadow" id="card" style="border: 5px solid #7cd1e4;">
+        <div class="col-lg-6 h-100">
+            <div class="card bg-light mb-3" style="border: 5px solid #7cd1e4;">
+                <div class="card-header"><h2>Key</h2></div>
+                <div class="card-body">
+                    <h5>
+                    <ol>
+                        <li><h5>Each molecule represents one microgram of a pollutant</h5></li>
+                        <li><h5>The Canvas itself represents one liter of air</h5></li>
+                        <li><h5>Data comes from Breezometer Air Quality API and Google Maps API</h5></li>
+                    </ol>
+                        Below, you can click on any row in the table to learn about the respective pollutant
+                    </h5>
+                </div>
+            </div>
+            <div class="card mb-4 box-shadow w-100 h-100" id="card" style="border: 5px solid #7cd1e4;">
                 <div class="card-header">
                     <h2>Pollutant Information</h2>
                 </div>
@@ -133,13 +147,12 @@
             </div>
         </div>
         <!-- /DataCard -->
-        <div class="row">
-            <div class="col-lg-5">
-
-            </div>
-        </div>
     </div>
+    <br>
 </div>
+<footer class="page-footer font-small blue">
+    <div class="footer-copyright text-center py-3">Created by Anton Lavrouk for HackGT8</div>
+</footer>
 <!-- /Body -->
 <script src="./canvas.js"></script>
 </body>
